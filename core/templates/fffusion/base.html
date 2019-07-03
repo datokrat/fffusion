@@ -1,0 +1,34 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} -- FFFusion</title>
+    <link rel="stylesheet" href="{% static "fffusion/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "fffusion/style.css" %}">
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-dark bg-dark shadow-sm">
+        <div>
+        <a class="navbar-brand" href="{% url 'core:dashboard' %}">FFFusion</a>
+        <a class="navbar-link" href="{% url 'core:dashboard' %}">Übersicht</a>
+        </div>
+        {% if request.user.is_authenticated %}
+        <span class="navbar-text">Hallo {{request.user.username}}, Du bist angemeldet.</span>
+        <a class="navbar-link" href="{% url 'logout' %}?next={% url 'core:dashboard' %}">Logout</a>
+        {% else %}
+          <a class="navbar-link" href="{% url 'login' %}?next={% url 'core:dashboard' %}">Login</a>
+        {% endif %}
+      </nav>
+
+    </header>
+
+    <main>
+{% block content %}
+{% endblock %}
+    </main>
+  </body>
+</html>

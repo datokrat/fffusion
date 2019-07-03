@@ -1,0 +1,38 @@
+{% extends "fffusion/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+{% if request.GET.dict.message == "login-required" %}
+<div class="alert alert-primary" role="alert">
+  {% if user.is_authenticated %}
+  Dein Konto ist nicht berechtigt, die gewünschte Aktion durchzuführen. Bitte melde dich mit einem berechtigten Account an.
+  {% else %}
+  Du must dich anmelden, um die gewünschte Aktion durchzuführen. Falls du keinen Account hast, klicke auf "Registrieren".
+  {% endif %}
+</div>
+{% endif %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<div class="form-group">
+  <label for="id_username">Benutzername:</label>
+  <input type="text" class="form-control" name="username" autofocus required id="id_username">
+</div>
+<div class="form-group">
+  <label for="id_password">Passwort:</label>
+  <input type="password" class="form-control" name="password" required id="id_password">
+</div>
+
+<input type="submit" class="btn btn-primary" value="Anmelden">
+<input type="hidden" name="next" value="{{ next }}">
+</form>
+
+</div>
+
+{% endblock %}
