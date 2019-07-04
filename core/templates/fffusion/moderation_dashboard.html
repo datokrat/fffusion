@@ -1,0 +1,42 @@
+{% extends "fffusion/base.html" %}
+
+{% block title %}Moderationszentrum{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Moderationszentrum</h1>
+
+  <section>
+    <h1>Abonnierte Moderator*innen</h1>
+    {% if moderators %}
+    <ul>
+      {% for moderator in moderators %}
+      <li>
+        <p>Name: {{ moderator.user.username }}</p>
+        <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
+        <p>Übereinstimmung (# wie du moderierte Beiträge : # gleichzeitig mit dir moderierte Beiträge): {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    keine...
+    {% endif %}
+  </section>
+
+  <section>
+    <h1>Moderator*innenvorschläge</h1>
+    {% if moderator_candidates %}
+    <ul>
+      {% for moderator in moderator_candidates %}
+      <li>
+        <p>Name: {{ moderator.user.username }}</p>
+        <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
+        <p>Übereinstimmung (# wie du moderierte Beiträge : # gleichzeitig mit dir moderierte Beiträge): {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    keine...
+    {% endif %}
+</div>
+{% endblock %}

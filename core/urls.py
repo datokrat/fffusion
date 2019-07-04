@@ -5,6 +5,8 @@ from . import views
 app_name="core"
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
-    path("ontology/<int:ontid>", views.ontology_dashboard, name="ontology_dashboard"),
-    path("ontology/<int:ontid>/post/<int:postid>", views.ontology_post, name="ontology_post"),
+    path("post/<int:postid>", views.post, name="post"),
+    path("create_reply/to/<int:replytoid>", views.create_reply, name="create_reply"),
+    path("moderate/reply/<int:repid>/value/<str:value>", views.moderate_reply, name="moderate_reply"),
+    path("moderation_dashboard", views.moderation_dashboard, name="moderation_dashboard"),
 ]

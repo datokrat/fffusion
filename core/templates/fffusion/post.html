@@ -1,0 +1,32 @@
+{% extends 'fffusion/base.html' %}
+
+{% block title %}Post: {{post.title}}{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Beitrag: {{ post.title }}</h1>
+  {{ post.content }}
+
+  <h1>Antworten</h1>
+  {% if post.replies %}
+  <ul>
+    {% for r in post.replies %}
+    <li>
+      <h2><a href="{% url "core:post" postid=r.reply_post.id %}">{{r.reply_post.title}}</a></h2>
+      <p>{{rep.reply_post.content}}</p>
+      <p>
+        {% if r.my_moderation == 0 %}
+        Ist dieser Beitrag eine angemessene Antwort? <a href="{% url "core:moderate_reply" repid=r.id value="positive" %}">ja</a> / <a href="{% url "core:moderate_reply" repid=r.id value="negative" %}">nein</a>
+        {% elif r.my_moderation == 1 %}
+        Du findest, dass dieser Beitrag eine angemessene Antwort ist.
+        {% elif r.my_moderation == -1 %}
+        Du findest, dass dieser Beitrag eine unangemessene Antwort ist.
+        {% endif %}
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <a href="{% url "core:create_reply" replytoid=post.id %}">Neue Antwort verfassen</a>
+</div>
+{% endblock %}

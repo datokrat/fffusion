@@ -15,6 +15,7 @@
         <div>
         <a class="navbar-brand" href="{% url 'core:dashboard' %}">FFFusion</a>
         <a class="navbar-link" href="{% url 'core:dashboard' %}">Übersicht</a>
+        <a class="navbar-link" href="{% url 'core:moderation_dashboard' %}">Moderationszentrum</a>
         </div>
         {% if request.user.is_authenticated %}
         <span class="navbar-text">Hallo {{request.user.username}}, Du bist angemeldet.</span>
