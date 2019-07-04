@@ -1,0 +1,29 @@
+{% extends "fffusion/base.html" %}
+
+{% block title %}Beitrag bearbeiten{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Beitrag bearbeiten: {{ post.title }}</h1>
+
+  <p>{{ post.content }}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_title">Neue Überschrift:</label>
+      <input type="text" class="form-control" name="title" maxlength="255" required value="{{post.title}}" id="id_title">
+      <small class="text-muted">Beschreibe kurz und prägnant, worum es dir geht.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="id_content">Neuer Text:</label>
+      <textarea class="form-control" name="content" maxlength="1023" required  id="id_content">{{post.content}}</textarea>
+    </div>
+
+    <input type="submit" value="Beitrag aktualisieren">
+    <small class="text-muted">Beachte, dass dein Beitrag inzwischen als Antwort auf mehrere Beiträge dienen könnte und auch schon Leute Antworten auf deinen Beitrag verfasst haben könnten. Deshalb solltest du die Bedeutung des Beitrags nicht stark verändern.</small>
+  </form>
+</div>
+{% endblock %}

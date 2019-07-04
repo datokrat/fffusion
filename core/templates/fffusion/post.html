@@ -4,6 +4,18 @@
 {% block content %}
 <div class="container">
   <h1>Beitrag: {{ post.title }}</h1>
+  {% if request.user.is_authenticated %}
+  <div>
+    {% if request.user == post.creator %}
+    <a class="btn btn-normal" href="{% url "core:edit_post" postid=post.id %}">Bearbeiten</a>
+    {% endif %}
+    {% if post.is_in_clipboard %}
+    <a class="btn btn-normal" href="{% url "core:remove_clipboard_item" postid=post.id %}">Aus Zwischenablage entfernen</a>
+    {% else %}
+    <a class="btn btn-normal" href="{% url "core:add_clipboard_item" postid=post.id %}">Zur Zwischenablage hinzufügen</a>
+    {% endif %}
+  </div>
+  {% endif %}
   {{ post.content }}
 
   <h1>Antworten</h1>
@@ -28,5 +40,6 @@
   {% endif %}
 
   <a href="{% url "core:create_reply" replytoid=post.id %}">Neue Antwort verfassen</a>
+  <a href="{% url "core:reply_from_clipboard" replytoid=post.id %}">Antwort aus Zwischenablage verlinken</a>
 </div>
 {% endblock %}

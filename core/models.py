@@ -59,6 +59,9 @@ class ModeratedPost:
     def creator(self):
         return self.post.creator
 
+    def is_in_clipboard(self):
+        return ClipboardItem.objects.filter(owner=self.user, item=self.post).exists()
+
 class ModeratedReply:
     def __init__(self, reply, user):
         self.reply = reply
@@ -68,7 +71,10 @@ class ModeratedReply:
         return self.reply.id
 
     def my_moderation(self):
-        return self.reply.get_my_moderation(self.user)
+        return self.moderation_of(self.user)
+
+    def moderation_of(self, other_user):
+        return self.reply.get_my_moderation(other_user)
 
     def to_post(self):
         return ModeratedPost(self.reply.to_post, self.user)
@@ -132,4 +138,10 @@ class ReplyModeration(models.Model):
 class ModeratorSubscription(models.Model):
     subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passive_moderator_subscriptions")
     moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="active_moderator_subscriptions")
+
+# Clipboard
+
+class ClipboardItem(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Post, on_delete=models.CASCADE)
 

@@ -1,0 +1,20 @@
+{% extends "fffusion/base.html" %}
+
+{% block title %}Antwort aus Zwischenablage verlinken{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Antworten auf den Post: {{reply_to.title}}</h1>
+  {{reply_to.content}}
+
+  <h1>Verlinke als Antwort aus der Zwischenablage:</h1>
+  <ul>
+    {% for item in clipboard_items %}
+    <li>
+      <p><a href="{% url "core:post" postid=item.item.id %}">{{item.item.title}}</a></p>
+      <p><a href="{% url "core:link_reply" replytoid=reply_to.id replyid=item.item.id %}">Mit diesem Beitrag antworten</a></p>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
