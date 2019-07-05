@@ -4,8 +4,21 @@ main {
 
 h1 {
   font-size: 1.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5em;
+  margin-top: 2rem;
+  /*margin-bottom: 1em;*/
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+.card-title {
+  margin-bottom: 0;
+}
+
+p, ul {
+  margin-top: 1rem;
 }
 
 .toolbar-with-spacing {
@@ -14,25 +27,22 @@ h1 {
 }
 
 .selected-button {
-  text-decoration: underline;
+  text-decoration: underline ! important;
 }
 
 ul.card-list {
-  margin-top: 0.5rem;
   padding: 0;
 }
 
 ul.card-list>li {
   list-style-type: none;
-  display: inline-block;
 }
 
-ul.card-list .card {
-  width: 18rem;
+.card {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.pledge-deadline {
-  font-style: italic;
+.navbar a, .navbar span {
+  margin-right: 0.5em;
 }
-
-

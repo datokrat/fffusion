@@ -1,45 +1,71 @@
 {% extends 'fffusion/base.html' %}
 
 {% block title %}Post: {{post.title}}{% endblock %}
+{% block navtitle %}Post: {{post.title}}{% endblock %}
 {% block content %}
 <div class="container">
-  <h1>Beitrag: {{ post.title }}</h1>
-  {% if request.user.is_authenticated %}
-  <div>
-    {% if request.user == post.creator %}
-    <a class="btn btn-normal" href="{% url "core:edit_post" postid=post.id %}">Bearbeiten</a>
-    {% endif %}
-    {% if post.is_in_clipboard %}
-    <a class="btn btn-normal" href="{% url "core:remove_clipboard_item" postid=post.id %}">Aus Zwischenablage entfernen</a>
-    {% else %}
-    <a class="btn btn-normal" href="{% url "core:add_clipboard_item" postid=post.id %}">Zur Zwischenablage hinzufügen</a>
-    {% endif %}
+  {% if request.user.is_authenticated and clipboard_items %}
+  <div class="row">
+    <div class="col">
+  {% endif %}
+      {% if request.user.is_authenticated %}
+      <div class="toolbar-with-spacing">
+        {% if request.user == post.creator %}
+        <a class="btn btn-light" href="{% url "core:edit_post" postid=post.id %}">Bearbeiten</a>
+        {% endif %}
+        {% if post.is_in_clipboard %}
+        <a class="btn btn-light" href="{% url "core:remove_clipboard_item" postid=post.id %}">Aus Zwischenablage entfernen</a>
+        {% else %}
+        <a class="btn btn-light" href="{% url "core:add_clipboard_item" postid=post.id %}">Zur Zwischenablage hinzufügen</a>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% include "fffusion/fragments/postcard.html" with post=post %}
+    
+        <h1>Antworten</h1>
+          {% if post.replies %}
+          <ul class="card-list">
+            {% for r in post.replies %}
+            <li>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><a href="{% url "core:post" postid=r.reply_post.id %}">{{r.reply_post.title}}</a></h5>
+                  <small class="text-muted">
+                {% if r.my_moderation == 0 %}
+                Ist dieser Beitrag eine angemessene Antwort? <a href="{% url "core:moderate_reply" repid=r.id value="positive" %}">ja</a> / <a href="{% url "core:moderate_reply" repid=r.id value="negative" %}">nein</a>
+                {% elif r.my_moderation == 1 %}
+                als angemessene Antwort markiert <a href="{% url "core:moderate_reply" repid=r.id value="neutral" %}">rückgängig</a>
+                {% elif r.my_moderation == -1 %}
+                als unangemessene Antwort markiert <a href="{% url "core:moderate_reply" repid=r.id value="neutral" %}">rückgängig</a>
+                {% endif %}
+                  </small>
+                  <p>{{r.reply_post.content}}</p>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+    
+      {% if request.user.is_authenticated %}
+      <h1>Neue Antwort</h1>
+      <a class="btn btn-light" href="{% url "core:create_reply" replytoid=post.id %}">Neue Antwort verfassen</a>
+      <a class="btn btn-light" href="{% url "core:reply_from_clipboard" replytoid=post.id %}">Antwort aus Zwischenablage verlinken</a>
+      {% endif %}
+  {% if request.user.is_authenticated and clipboard_items %}
+    </div>
+
+    <div class="col">
+      <h1>Zwischenablage</h1>
+      <ul class="card-list">
+        {% for item in clipboard_items %}
+        <li>
+          {% include "fffusion/fragments/postcard.html" with post=item.item link=True %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
   {% endif %}
-  {{ post.content }}
-
-  <h1>Antworten</h1>
-  {% if post.replies %}
-  <ul>
-    {% for r in post.replies %}
-    <li>
-      <h2><a href="{% url "core:post" postid=r.reply_post.id %}">{{r.reply_post.title}}</a></h2>
-      <p>{{rep.reply_post.content}}</p>
-      <p>
-        {% if r.my_moderation == 0 %}
-        Ist dieser Beitrag eine angemessene Antwort? <a href="{% url "core:moderate_reply" repid=r.id value="positive" %}">ja</a> / <a href="{% url "core:moderate_reply" repid=r.id value="negative" %}">nein</a>
-        {% elif r.my_moderation == 1 %}
-        Du findest, dass dieser Beitrag eine angemessene Antwort ist.
-        {% elif r.my_moderation == -1 %}
-        Du findest, dass dieser Beitrag eine unangemessene Antwort ist.
-        {% endif %}
-      </p>
-    </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-
-  <a href="{% url "core:create_reply" replytoid=post.id %}">Neue Antwort verfassen</a>
-  <a href="{% url "core:reply_from_clipboard" replytoid=post.id %}">Antwort aus Zwischenablage verlinken</a>
 </div>
 {% endblock %}

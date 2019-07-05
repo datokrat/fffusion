@@ -7,12 +7,16 @@ from .forms import CreatePostForm
 from .models import Post, Reply, ModeratedPost, ModeratedReply, UserEx, ReplyModeration, ModeratorSubscription, ClipboardItem
 
 def dashboard(request):
-    return render(request=request, template_name="fffusion/base.html")
+    return HttpResponseRedirect(reverse("core:post", kwargs={"postid": 1}))
 
 def post(request, postid):
     post = ModeratedPost(get_object_or_404(Post.objects, id=postid), request.user)
-    #replies = [ {"res": r, "mod": r.get_my_moderation(request.user)} for r in post.replies.all() if r.get_collective_moderation(request.user) == 1 ]
-    return render(request=request, template_name="fffusion/post.html", context={"post": post })
+    if request.user.is_authenticated:
+        clipboard_items = ClipboardItem.objects.filter(owner=request.user).all()
+    else:
+        clipboard_items = False
+
+    return render(request=request, template_name="fffusion/post.html", context={"post": post, "clipboard_items": clipboard_items})
 
 def create_reply(request, replytoid):
     reply_to = get_object_or_404(Post.objects, id=replytoid)
@@ -56,13 +60,16 @@ def moderate_reply(request, repid, value):
         elif value == "neutral":
             reply.moderate(0)
         else:
-            return HttpResponseRedirect("Der Moderationswert ist ungültig!")
+            return HttpResponse("Der Moderationswert ist ungültig!")
 
         return HttpResponseRedirect(reverse("core:post", kwargs={"postid": reply.to_post().id()}))
     else:
         return HttpResponseRedirect(reverse("login"))
 
 def moderation_dashboard(request):
+    return HttpResponseRedirect(reverse("core:moderation_dashboard_moderators"))
+
+def moderation_dashboard_moderators(request):
     # TODO: asymptotic performance
     # TODO: only when logged in
     moderator_candidates = [ UserEx(u, request.user) for u in User.objects.all() if not UserEx(u, request.user).does_moderate() ]
@@ -72,9 +79,18 @@ def moderation_dashboard(request):
     num_fn = lambda u: u.false_negatives().count()
     moderator_candidates.sort(key=lambda u: (num_all(u) * ((num_all(u) - num_fp(u) - 3 * num_fn(u)) / num_all(u))**3 if num_all(u) > 0 else -1))
 
-    moderators = [ UserEx(u, request.user) for u in request.user.passive_moderator_subscriptions.values_list("moderator", flat=True) ]
+    moderators = [ UserEx(s.moderator, request.user) for s in request.user.passive_moderator_subscriptions.all() ]
 
     return render(request=request, template_name="fffusion/moderation_dashboard.html", context={"moderator_candidates": moderator_candidates, "moderators": moderators})
+
+def moderation_dashboard_posts(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    me = UserEx(request.user, request.user)
+
+    my_moderations = me.all_moderations().all()
+    return render(request=request, template_name="fffusion/moderation_dashboard_posts.html", context={"my_moderations": my_moderations})
 
 def moderator_detail(request, modid):
     # TODO: only when logged in

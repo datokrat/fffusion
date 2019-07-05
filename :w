@@ -13,11 +13,11 @@
     <header>
       <nav class="navbar navbar-dark bg-dark shadow-sm">
         <div>
-        <span style="color: #0f0" class="navbar-brand" href="{% url 'core:dashboard' %}">FFFusion</span>
+        <a class="navbar-brand" href="{% url 'core:dashboard' %}">FFFusion</a>
         <a class="navbar-link" href="{% url 'core:dashboard' %}">Übersicht</a>
         <a class="navbar-link" href="{% url 'core:moderation_dashboard' %}">Moderationszentrum</a>
         </div>
-        <div><span class="navbar-text text-light">{% block navtitle %}{% endblock %}</span></div>
+        <div><span>{% block title %}{% endblock %}</span></div>
         <div>
         {% if request.user.is_authenticated %}
         <span class="navbar-text">Hallo {{request.user.username}}, Du bist angemeldet.</span>
@@ -34,11 +34,9 @@
 {% block content %}
 {% endblock %}
 
-    <footer>
-      <div class="navbar text-white bg-dark shadow-sm">
-        FFFusion-Prototyp 2019
+      <div class="container footer">
+        Footer
       </div>
-    </footer>
     </main>
   </body>
 </html>

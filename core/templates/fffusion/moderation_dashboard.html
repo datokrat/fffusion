@@ -1,21 +1,31 @@
 {% extends "fffusion/base.html" %}
 
 {% block title %}Moderationszentrum{% endblock %}
+{% block navtitle %}Moderationszentrum{% endblock %}
 
 {% block content %}
 <div class="container">
-  <h1>Moderationszentrum</h1>
+  <div class="toolbar-with-spacing">
+    <div class="btn-group">
+      <a class="btn btn-light" href="{% url "core:moderation_dashboard_posts" %}">Moderierte Beiträge</a>
+      <a class="btn btn-light selected-button" href="{% url "core:moderation_dashboard_moderators" %}">Moderator*innen</a>
+    </div>
+  </div>
 
   <section>
     <h1>Abonnierte Moderator*innen</h1>
     {% if moderators %}
-    <ul>
+    <ul class="card-list">
       {% for moderator in moderators %}
       <li>
-        <p>Name: {{ moderator.user.username }}</p>
-        <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
-        <p>Übereinstimmung (# wie du moderierte Beiträge : # gleichzeitig mit dir moderierte Beiträge): {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
-        <p><a href="{% url "core:moderator_detail" modid=moderator.user.id %}">Details (hier auch klicken um zu deabonnieren)</a></p>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{moderator.user.username}} <a class="btn btn-light" href="{% url "core:moderator_detail" modid=moderator.user.id %}">Details</a></h5>
+            
+            <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
+            <p>Übereinstimmung <small class="text-muted">(gleich wie du moderierte Beiträge : gemeinsam mit dir moderierte Beiträge)</small>: {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
+          </div>
+        </div>
       </li>
       {% endfor %}
     </ul>
@@ -27,13 +37,17 @@
   <section>
     <h1>Moderator*innenvorschläge</h1>
     {% if moderator_candidates %}
-    <ul>
+    <ul class="card-list">
       {% for moderator in moderator_candidates %}
       <li>
-        <p>Name: {{ moderator.user.username }}</p>
-        <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
-        <p>Übereinstimmung (# wie du moderierte Beiträge : # gleichzeitig mit dir moderierte Beiträge): {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
-        <p><a href="{% url "core:moderator_detail" modid=moderator.user.id %}">Details (hier auch klicken um zu abonnieren)</a></p>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{moderator.user.username}} <a class="btn btn-light" href="{% url "core:moderator_detail" modid=moderator.user.id %}">Details</a></h5>
+            
+            <p>Moderierte Beiträge insgesamt: {{ moderator.all_moderations.count }}</p>
+            <p>Übereinstimmung <small class="text-muted">(gleich wie du moderierte Beiträge : gemeinsam mit dir moderierte Beiträge)</small>: {{ moderator.num_correlated_moderations }} : {{ moderator.common_moderations.count }}<p>
+          </div>
+        </div>
       </li>
       {% endfor %}
     </ul>

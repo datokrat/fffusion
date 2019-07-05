@@ -1,55 +1,70 @@
 {% extends "fffusion/base.html" %}
 
 {% block title %}Moderator*innen-Details{% endblock %}
+{% block navtitle %}Moderator*innen-Details: {{ moderator.user.username }}{% endblock %}
 
 {% block content %}
 <div class="container">
-  <h1>Moderator*innen-Details: {{ moderator.user.username }}</h1>
+  <a href="{% url "core:moderation_dashboard_moderators" %}" class="btn btn-light">Zurück zum Moderationszentrum</a>
 
-  <div>
+  <h1>Moderator*in: {{ moderator.user.username }}
     {% if moderator.user == request.user and false %}
     <!-- sich selbst abonnieren geht nicht... -->
     {% elif moderator.does_moderate %}
-    <a class="btn btn-normal" href="{% url "core:moderator_unsubscribe" modid=moderator.user.id %}">deabonnieren</a>
+    <a class="btn btn-light" href="{% url "core:moderator_unsubscribe" modid=moderator.user.id %}">deabonnieren</a>
     {% else %}
-    <a class="btn btn-normal" href="{% url "core:moderator_subscribe" modid=moderator.user.id %}">abonnieren</a>
+    <a class="btn btn-light" href="{% url "core:moderator_subscribe" modid=moderator.user.id %}">abonnieren</a>
     {% endif %}
-  </div>
+  </h1>
 
   <section>
-    <h1>Unterschiedlich moderierte Beiträge</h1>
+    <h2>Unterschiedlich moderierte Beiträge</h2>
 
-    <ul>
+    {% if dissent_replies %}
+    <ul class="card-list">
       {% for r in dissent_replies %}
         <li>
-          <p>Beitrag: <a href="{% url "core:post" postid=r.0.reply_post.id %}">{{r.0.reply_post.title}}</a></p>
-          <p>Antwort auf: <a href="{% url "core:post" postid=r.0.to_post.id %}">{{r.0.to_post.title}}</a></p>
-          {% if r.1 == 1 %}
-          <p>als angemessen eingestuft, von dir aber als unangemessen!</p>
-          {% else %}
-          <p>als unangemessen eingestuft, von dir aber als angemessen!</p>
-          {% endif %}
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{% url "core:post" postid=r.0.reply_post.id %}">{{r.0.reply_post.title}}</a></h5>
+              <small>
+                Als Antwort auf <a href="{% url "core:post" postid=r.0.to_post.id %}">{{ r.0.to_post.title }}</a>
+                als {% if r.1 == 1 %}angemessen markiert, von dir aber als unangemessen!{% else %}unangemessen markiert, von dir aber als angemessen!{% endif %}
+              </small>
+              <p>{{r.0.reply_post.content}}</p>
+            </div>
+          </div>
         </li>
       {% endfor %}
     </ul>
+    {% else %}
+    <p>keine...</p>
+    {% endif %}
   </section>
 
   <section>
-    <h1>Gleich moderierte Beiträge</h1>
+    <h2>Gleich moderierte Beiträge</h2>
 
-    <ul>
+    {% if consent_replies %}
+    <ul class="card-list">
       {% for r in consent_replies %}
         <li>
-          <p>Beitrag: <a href="{% url "core:post" postid=r.0.reply_post.id %}">{{r.0.reply_post.title}}</a></p>
-          <p>Antwort auf: <a href="{% url "core:post" postid=r.0.to_post.id %}">{{r.0.to_post.title}}</a></p>
-          {% if r.1 == 1 %}
-          <p>als angemessen eingestuft</p>
-          {% else %}
-          <p>als unangemessen eingestuft</p>
-          {% endif %}
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{% url "core:post" postid=r.0.reply_post.id %}">{{r.0.reply_post.title}}</a></h5>
+              <small>
+                Als Antwort auf <a href="{% url "core:post" postid=r.0.to_post.id %}">{{ r.0.to_post.title }}</a>
+                als {% if r.1 == 1 %}angemessen markiert{% else %}unangemessen markiert{% endif %}
+              </small>
+              <p>{{r.0.reply_post.content}}</p>
+            </div>
+          </div>
         </li>
       {% endfor %}
     </ul>
+    {% else %}
+    <p>keine...</p>
+    {% endif %}
   </section>
 </div>
 {% endblock %}

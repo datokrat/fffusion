@@ -27,8 +27,8 @@ class UserEx:
         return self.user.reply_moderations.filter(appropriate=-1)
 
     def common_moderations(self):
-        return self.user.reply_moderations.exclude(appropriate=0)\
-            .intersection(self.perspective_of_user.reply_moderations.exclude(appropriate=0))
+        return self.user.reply_moderations.exclude(appropriate=0).values_list("reply", flat=True)\
+            .intersection(self.perspective_of_user.reply_moderations.exclude(appropriate=0).values_list("reply", flat=True))
 
     def num_correlated_moderations(self):
         return self.common_moderations().count() - self.false_positives().count() - self.false_negatives().count()
@@ -112,6 +112,9 @@ class Reply(models.Model):
             return 0
 
     def get_collective_moderation(self, user):
+        if not user.is_authenticated:
+            return 1
+
         if self.get_my_moderation(user) == -1:
             return -1
 

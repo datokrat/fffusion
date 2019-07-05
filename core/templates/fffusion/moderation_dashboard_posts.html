@@ -1,0 +1,38 @@
+{% extends "fffusion/base.html" %}
+
+{% block title %}Moderationszentrum{% endblock %}
+{% block navtitle %}Moderationszentrum{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="toolbar-with-spacing">
+    <div class="btn-group">
+      <a class="btn btn-light selected-button" href="{% url "core:moderation_dashboard_posts" %}">Moderierte Beiträge</a>
+      <a class="btn btn-light" href="{% url "core:moderation_dashboard_moderators" %}">Moderator*innen</a>
+    </div>
+  </div>
+
+  <h1>Meine Moderationen</h1>
+  {% if my_moderations %}
+  <ul class="card-list">
+    {% for moderation in my_moderations %}
+    <li>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{% url "core:post" postid=moderation.reply.reply_post.id %}">{{moderation.reply.reply_post.title}}</a></h5>
+          <small>
+            Als Antwort auf <a href="{% url "core:post" postid=moderation.reply.to_post.id %}">{{ moderation.reply.to_post.title }}</a>
+            von dir als {% if moderation.appropriate == 1 %}angemessen{% else %}unangemessen{% endif %} markiert.
+            <a href="{% url "core:moderate_reply" repid=moderation.reply.id value="neutral" %}">rückgängig</a>
+          </small>
+          <p>{{moderation.reply.reply_post.content}}</p>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  keine...
+  {% endif %}
+</div>
+{% endblock %}
