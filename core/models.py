@@ -131,6 +131,9 @@ class Reply(models.Model):
         else:
             return -1
 
+    class Meta:
+        unique_together = ("to_post", "reply_post")
+
 # Moderation
 
 class ReplyModeration(models.Model):
@@ -138,13 +141,22 @@ class ReplyModeration(models.Model):
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE, related_name="moderations")
     appropriate = models.IntegerField()
 
+    class Meta:
+        unique_together = ("moderator", "reply")
+
 class ModeratorSubscription(models.Model):
     subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name="passive_moderator_subscriptions")
     moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="active_moderator_subscriptions")
+
+    class Meta:
+        unique_together = ("subscriber", "moderator")
 
 # Clipboard
 
 class ClipboardItem(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("owner", "item")
 
