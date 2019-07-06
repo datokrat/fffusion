@@ -46,3 +46,7 @@ ul.card-list>li {
 .navbar a, .navbar span {
   margin-right: 0.5em;
 }
+
+footer {
+  margin-top: 6em;
+}
