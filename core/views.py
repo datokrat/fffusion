@@ -7,7 +7,7 @@ from .forms import CreatePostForm
 from .models import Post, Reply, ModeratedPost, ModeratedReply, UserEx, ReplyModeration, ModeratorSubscription, ClipboardItem
 
 def dashboard(request):
-    return HttpResponseRedirect(reverse("core:post", kwargs={"postid": 1}))
+    return render(request=request, template_name="fffusion/intro.html")
 
 def post(request, postid):
     post = ModeratedPost(get_object_or_404(Post.objects, id=postid), request.user)

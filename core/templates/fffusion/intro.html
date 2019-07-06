@@ -1,0 +1,41 @@
+{% extends "fffusion/base.html" %}
+
+{% block title %}Intro{% endblock %}
+{% block navtitle %}Intro{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Willkommen bei FFFusion</h1>
+
+  <p>Diese Plattform soll helfen, Diskussionsstände übersichtlich und gemeinsam zu sammeln.</p>
+  <p>Sie wurde entsprechend folgender Prinzipien entworfen:</p>
+  <ul>
+    <li>
+      <strong>Du entscheidest, was du siehst.</strong> Deshalb gibt es hier keine Moderation im dir bekannten Sinne (abgesehen von strafbaren Inhalten). Stattdessen kannst du andere Nutzer zu Moderatoren ernennen, die die beim Aussortieren unangemessener Inhalte helfen und kontrollieren, ob sie ihre Arbeit gut machen. Umgekehrt kannst auch du von anderen abonniert werden. Dann tragen von dir vorgenommene Markierungen bei deinen Abonnent*innen dazu bei zu entscheiden, welche Inhalte unangemessen sind und ausgeblendet werden.
+    </li>
+    <li>
+      <strong>Diskussionsstand für die Nachwelt konservieren.</strong> Anders als in Chats, in denen ältere Diskussionen mit der Zeit in Vergessenheit geraten, sind die Inhalte hier thematisch und nicht chronologisch angeordnet. Beispielsweise kannst du bei einer Behauptung einsteigen und dir Antworten darauf durchlesen: Argumente dafür, Argumente dagegen, Ergänzungen und so weiter. Wenn dich eine dieser Antworten interessiert, kannst du dort weiterlesen und wiederum Antworten auf die Antwort lesen. Darunter sind alle Argumente, die bisher in der Diskussion gefallen sind: Kein Argument hat ein Ablaufdatum.
+    </li>
+    <li>
+      <strong>Jedes Argument einmal und nur einmal.</strong> Manchmal ist ein und dasselbe Argument an zwei verschiedenen Stellen der Diskussion hilfreich. Du kannst deshalb schon existierende Argumente auch an anderen Stellen verlinken, ohne den Text kopieren zu müssen. Der Vorteil liegt auf der Hand: Gäbe es zwei Beiträge für dasselbe Argument, würden Menschen, die von Stelle A auf das Argument stoßen, isoliert von denen diskutieren, die von Stelle B darauf stoßen.
+    </li>
+  </ul>
+
+  <p>Worauf du beim Einstieg achten solltest:</p>
+  <ul>
+    <li><strong>Verwende die Moderationswerkzeuge.</strong>
+      Je mehr Antworten du selbst als angemessen oder unangemessen markierst, desto besser wird die Rückmeldung, ob die von dir abonnierten Moderator*innen in deinem Sinne moderieren. Diese Rückmeldung siehst du im Moderationszentrum. Außerdem hilft jede von dir gesetzte Markierung deinen Abonnent*innen.
+    </li>
+    <li><strong>Nicht alles dürfte reibungslos funktionieren.</strong>
+      Dieses Tool wurde an einem Wochenende zusammengehackt. Manche Dinge sind noch nicht ausgereift, können aber im Gegensatz zu einer vorgefertigten Forumslösung leicht von mir nachgebessert werden! Ich vermute, dass es derzeit Probleme mit folgenden Situationen geben kann:
+      <ul>
+        <li>Duplikat-Beiträge: Wenn man nicht genau hinschaut oder ein schon an anderer Stelle angebrachtes Argument - ohne davon zu wissen - postet, kann das zu unerwünschten Problemen führen: Siehe Prinzip "Jedes Argument einmal und nur einmal." Die dezentrale Moderation ist derzeit nicht in der Lage, hier eine Entscheidung zu treffen: Es gibt kein objektives Kriterium, welcher der beiden Beiträge verworfen werden sollte.</li>
+        <li>Es gibt wohl noch andere ähnliche Probleme mit der dezentralen Moderation.</li>
+      </ul>
+      Wenn ein solches Problem auftritt, solltest du in der Whatsappgruppe versuchen, mit den anderen zu klären, wie wir zusammen vorgehen können, zum Beispiel welcher der doppelten Beiträge gelöscht werden soll.
+      <li><strong>Ein wesentliches inhaltliches Argument pro Beitrag.</strong> Versuche deine Argumente kurz und sachlich zu halten. Es sollte darin nur ein einziges Argument vorkommen. Pro-Contra-Abwägungen sollten in mehrere Beiträge zerlegt werden (Antwort-Mechanismus verwenden).</li>
+  </ul>
+
+  <p>Los geht's: <a href="{% url "core:post" postid=1 %}">Hier geht es zur Überblicksseite.</a></p>
+</div>
+{% endblock %}
