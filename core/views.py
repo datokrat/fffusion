@@ -71,7 +71,9 @@ def moderation_dashboard(request):
 
 def moderation_dashboard_moderators(request):
     # TODO: asymptotic performance
-    # TODO: only when logged in
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
     moderator_candidates = [ UserEx(u, request.user) for u in User.objects.all() if not UserEx(u, request.user).does_moderate() ]
 
     num_all = lambda u: u.common_moderations().count()
@@ -93,7 +95,9 @@ def moderation_dashboard_posts(request):
     return render(request=request, template_name="fffusion/moderation_dashboard_posts.html", context={"my_moderations": my_moderations})
 
 def moderator_detail(request, modid):
-    # TODO: only when logged in
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
     moderator = UserEx(get_object_or_404(User.objects, id=modid), request.user)
 
     moderated_replies = [ ModeratedReply(moderation.reply, request.user) for moderation in moderator.all_moderations().all() ]
